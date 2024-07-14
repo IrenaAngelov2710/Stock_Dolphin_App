@@ -38,6 +38,15 @@ const Inventory = () => {
       });
   }, []);
 
+  const findTotalItems = (categories) => {
+    return categories.reduce(
+      (total, category) => total + category.items.length,
+      0
+    );
+  };
+
+  const totalItems = findTotalItems(categories);
+  
   const openModal = () => {
     setShowModal(true);
   };
