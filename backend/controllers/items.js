@@ -48,23 +48,13 @@ module.exports = {
   },
   create: async (req, res) => {
     try {
-      const { name } = req.body;
+      const { name, categoryId } = req.body;
       const image = req.file ? req.file.path : null;
 
-      const category = await Categories.findOne({
-        title: req.params.id,
-      });
-
-      // const newItem = await Item.create({
-      //   name,
-      //   image,
-      //   category: category._id,
-      // });
-
-      const newItem = new Item({ name, image, category: category._id });
+      const newItem = new Item({ name, image, categoryId });
       await newItem.save();
 
-      await Categories.findByIdAndUpdate(category._id, {
+      await Category.findByIdAndUpdate(categoryId, {
         $push: { items: newItem },
       });
 
@@ -90,10 +80,26 @@ module.exports = {
     //     return
     // }
 
-    await Item.findByIdAndDelete(req.params.id);
-    res.send({
-      error: false,
-      message: `Item with id #${req.params.id} has been deleted`,
-    });
+    try {
+      const item = await Item.findByIdAndDelete(req.params.id);
+
+      if (!item) {
+        return res.status(404).send({
+          error: true,
+          message: `Item with id #${req.params.id} not found`,
+        });
+      }
+
+      res.send({
+        error: false,
+        message: `Item with id #${req.params.id} has been deleted`,
+      });
+    } catch (error) {
+      res.status(500).send({
+        error: true,
+        message: "Error deleting item",
+        errorDetails: error.message,
+      });
+    }
   },
 };
