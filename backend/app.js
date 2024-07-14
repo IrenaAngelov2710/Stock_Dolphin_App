@@ -4,8 +4,14 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 const cors = require("cors");
+
+// initialization the MongoDB connection
+const { init } = require('./database/index');
+
+dotenv.config({ path: `${__dirname}/config/config.env` });
 
 // var usersRouter = require("./routes/users");
 var categoriesRouter = require("./routes/categories");
@@ -13,6 +19,13 @@ var itemsRouter = require("./routes/items");
 // var suppliersRouter = require("./routes/suppliers");
 
 var app = express();
+
+// connecting with MongoDB atlas
+init().then(() => {
+  console.log('Database initialized');
+}).catch((error) => {
+  console.error('Database initialization error:', error);
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
