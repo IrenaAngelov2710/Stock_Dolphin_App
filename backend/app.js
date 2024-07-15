@@ -8,6 +8,12 @@ const dotenv = require("dotenv");
 
 const cors = require("cors");
 
+// var usersRouter = require("./routes/users");
+var categoriesRouter = require("./routes/categories");
+var itemsRouter = require("./routes/items");
+var suppliersRouter = require("./routes/suppliers");
+
+
 // initialization the MongoDB connection
 const { init } = require('./database/index');
 
@@ -44,7 +50,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.use("/users", usersRouter);
 app.use("/categories", categoriesRouter);
 app.use("/items", itemsRouter);
-// app.use("/suppliers", suppliersRouter);
+app.use("/suppliers", suppliersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
