@@ -1,9 +1,18 @@
 const Item = require("../models/item");
 const Category = require("../models/category");
+const Order = require("../models/order");
 
 module.exports = {
   getAll: async (req, res) => {
-    const items = await Item.find().populate("category", "name");
+    const items = await Item.find()
+      .populate("category", "name")
+      .populate({
+        path: "orders",
+        populate: {
+          path: "supplier",
+          select: "name",
+        },
+      });
     res.send({
       error: false,
       message: "All items from database",
@@ -11,11 +20,15 @@ module.exports = {
     });
   },
   getById: async (req, res) => {
-    const item = await Item.findById(req.params.id).populate(
-      "category",
-      "name"
-    );
-
+    const item = await Item.findById(req.params.id)
+      .populate("category", "name")
+      .populate({
+        path: "orders",
+        populate: {
+          path: "supplier",
+          select: "name",
+        },
+      });
     res.send({
       error: false,
       message: `Item with id #${item._id}, has been fetched`,
@@ -51,11 +64,11 @@ module.exports = {
       const { name, categoryId } = req.body;
       const image = req.file ? req.file.path : null;
 
-      const newItem = new Item({ name, image, categoryId });
+      const newItem = new Item({ name, image, category: categoryId });
       await newItem.save();
 
       await Category.findByIdAndUpdate(categoryId, {
-        $push: { items: newItem },
+        $push: { items: newItem._id },
       });
 
       res.send({
@@ -81,7 +94,7 @@ module.exports = {
     // }
 
     try {
-      const item = await Item.findByIdAndDelete(req.params.id);
+      const item = await Item.findById(req.params.id);
 
       if (!item) {
         return res.status(404).send({
@@ -89,6 +102,11 @@ module.exports = {
           message: `Item with id #${req.params.id} not found`,
         });
       }
+
+      // Delete all orders associated with this item
+      await Order.deleteMany({ _id: { $in: item.orders } });
+      // Delete the item itself
+      await Item.findByIdAndDelete(req.params.id);
 
       res.send({
         error: false,

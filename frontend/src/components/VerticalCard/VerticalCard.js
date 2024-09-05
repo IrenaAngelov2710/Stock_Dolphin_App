@@ -1,11 +1,40 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import "./VerticalCard.css";
 import trashBinIcon from "../../assets/icons/trash-bin.svg";
 import { useNavigate } from "react-router-dom";
 
-const VerticalCard = memo(({ data, type }) => {
-  console.log(data);
+const VerticalCard = memo(({ data, type, onDeleteClick }) => {
   const navigate = useNavigate();
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const fetchTotalPrice = async () => {
+      try {
+        let response;
+
+        if (type === "item") {
+          response = await fetch(
+            `http://localhost:3000/orders/item/${data._id}`
+          );
+        } else if (type === "category") {
+          response = await fetch(
+            `http://localhost:3000/orders/category/${data._id}`
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch orders");
+        }
+
+        const result = await response.json();
+        setTotalPrice(result.totalPrice);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchTotalPrice();
+  }, [data._id, type]);
 
   const formattedDate = new Intl.DateTimeFormat("en-GB", {
     year: "numeric",
@@ -28,24 +57,22 @@ const VerticalCard = memo(({ data, type }) => {
     }
   };
   return (
-    <div
-      key={data.id}
-      className="vertical-card-container"
-      onClick={handleClick}
-    >
+    <div key={data.id} className="vertical-card-container">
       <img src={`http://localhost:3000/${data?.image}`} alt="" />
       <div className="vertical-card-content">
-        <span className="header">{data.name}</span>
+        <span className="header" onClick={handleClick}>
+          {data.name}
+        </span>
         {/* za category prikazuvame kolku items ima */}
         {type === "category" && (
           <span className="info">
-            <b>{data.items?.length || "0"} Items</b> | € 338.00
+            <b>{data.items?.length || "0"} Items</b> | € {totalPrice}
           </span>
         )}
         {/* za items prikazuvane kolku orders ima */}
         {type === "item" && (
           <span className="info">
-            <b>0 Purchase records</b> | € 338.00
+            <b>{data.orders?.length} Purchase records</b> | € {totalPrice}
           </span>
         )}
 
@@ -57,7 +84,7 @@ const VerticalCard = memo(({ data, type }) => {
               <b>{formattedDate}</b>
             </span>
           )}
-          <span className="trash-bin">
+          <span className="trash-bin" onClick={onDeleteClick}>
             <img src={trashBinIcon} alt="" />
           </span>
         </div>
