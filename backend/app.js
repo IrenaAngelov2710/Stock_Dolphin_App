@@ -19,11 +19,6 @@ const { init } = require('./database/index');
 
 dotenv.config({ path: `${__dirname}/config/config.env` });
 
-// var usersRouter = require("./routes/users");
-var categoriesRouter = require("./routes/categories");
-var itemsRouter = require("./routes/items");
-// var suppliersRouter = require("./routes/suppliers");
-
 var app = express();
 
 // connecting with MongoDB atlas
