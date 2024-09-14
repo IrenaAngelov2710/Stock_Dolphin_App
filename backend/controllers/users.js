@@ -44,9 +44,9 @@ module.exports = {
 
       // Create a new user instance
       const newUser = new User({
-        name, // add name field
+        name, 
         email,
-        password, // no need to hash manually, Mongoose will handle it
+        password, 
       });
 
       await newUser.save();
