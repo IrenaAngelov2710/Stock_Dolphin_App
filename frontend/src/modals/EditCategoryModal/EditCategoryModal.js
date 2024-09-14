@@ -1,4 +1,3 @@
-
 import "./EditCategoryModal.css";
 import React, { useEffect, useState } from "react";
 import closeIcon from "../../assets/icons/close-icon.svg";
@@ -81,7 +80,7 @@ const EditCategoryModal = ({ show, close, categoryData }) => {
           </span>
         </div>
         <div className="modal-content">
-          <form onSubmit={handleSubmit} className="edit-form">
+        <form onSubmit={handleSubmit} className="edit-form modal-form">
             <input
               className="form-name"
               value={name}
