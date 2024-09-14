@@ -3,16 +3,18 @@ import React, { useState, useContext } from "react";
 import logo from "../../assets/icons/logo-dolphin.svg";
 import GreenButton from "../../components/GreenButton/GreenButton";
 import AuthContext from "../../utils/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,8 +25,9 @@ const Login = () => {
     const data = await response.json();
 
     if (response.ok) {
-      login(data.token); //Call login function from context
+      login(data.token);
       alert("Login successful");
+      navigate("/dashboard");
     } else {
       alert("Invalid credentials");
     }
@@ -55,14 +58,17 @@ const Login = () => {
       </form>
       <div className="sign-up-account">
         <span>Don't have an account?</span>
-        <GreenButton
-          text="sign up"
-          style={{
-            backgroundColor: "#EAEAEA",
-            color: "#53A856",
-            border: "1px solid #53A856",
-          }}
-        />
+        <Link to="/signup" style={{ textDecoration: "none", width: "100%" }}>
+          <GreenButton
+            text="sign up"
+            style={{
+              backgroundColor: "#EAEAEA",
+              color: "#53A856",
+              border: "1px solid #53A856",
+              width: "100%",
+            }}
+          />
+        </Link>
       </div>
     </div>
   );
