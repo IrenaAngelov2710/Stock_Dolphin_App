@@ -1,3 +1,6 @@
+# Frontend (React default ignores)
+frontend/node_modules
+
+# Backend
 backend/node_modules
-backend/config/config.env
-.env
+backend/config/.env
