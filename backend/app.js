@@ -8,28 +8,29 @@ const dotenv = require("dotenv");
 
 const cors = require("cors");
 
-// var usersRouter = require("./routes/users");
+var usersRouter = require("./routes/users");
 var categoriesRouter = require("./routes/categories");
 var itemsRouter = require("./routes/items");
 var suppliersRouter = require("./routes/suppliers");
 var ordersRouter = require("./routes/orders");
-var usersRouter = require("./routes/users");
 
-// initialization the MongoDB connection
-const { init } = require('./database/index');
-
+// Loading configuration variables
 dotenv.config({ path: `${__dirname}/config/config.env` });
 
+// // Loading and initializing the MongoDB connection
+const { init } = require('./database/index');
+
+// Initialization of the Express application
 var app = express();
 
-// connecting with MongoDB atlas
+// Connecting with MongoDB atlas
 init().then(() => {
   console.log('Database initialized');
 }).catch((error) => {
   console.error('Database initialization error:', error);
 });
 
-// view engine setup
+// View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -43,25 +44,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use("/users", usersRouter);
+// Define the routes
+app.use("/auth", usersRouter);
 app.use("/categories", categoriesRouter);
 app.use("/items", itemsRouter);
 app.use("/suppliers", suppliersRouter);
 app.use("/orders", ordersRouter);
-app.use("/auth", usersRouter);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Error handler
 app.use(function (err, req, res, next) {
 // set locals, only providing error in development
 res.locals.message = err.message;
 res.locals.error = req.app.get("env") === "development" ? err : {};
 
-// render the error page
+// Render the error page
 res.status(err.status || 500);
   res.render("error");
 });
