@@ -1,11 +1,13 @@
 import "./EditCategoryModal.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import closeIcon from "../../assets/icons/close-icon.svg";
 import GreenButton from "../../components/GreenButton/GreenButton";
 import GreyButton from "../../components/GreyButton/GreyButton";
 import addPhotoIcon from "../../assets/icons/add-photo-icon.svg";
+import AuthContext from "../../utils/AuthContext";
 
 const EditCategoryModal = ({ show, close, categoryData }) => {
+  const { authToken } = useContext(AuthContext);
   const [name, setName] = useState(categoryData?.name || "");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -44,6 +46,10 @@ const EditCategoryModal = ({ show, close, categoryData }) => {
         `http://localhost:3000/categories/${categoryData._id}`,
         {
           method: "PUT",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
           body: formData,
         }
       );
@@ -80,7 +86,7 @@ const EditCategoryModal = ({ show, close, categoryData }) => {
           </span>
         </div>
         <div className="modal-content">
-        <form onSubmit={handleSubmit} className="edit-form modal-form">
+          <form onSubmit={handleSubmit} className="edit-form modal-form">
             <input
               className="form-name"
               value={name}

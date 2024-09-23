@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useContext } from "react";
 import "./Suppliers.css";
 import AppContainer from "../../components/AppContainer/AppContainer";
 import Search from "../../components/Search/Search";
 import GreenButton from "../../components/GreenButton/GreenButton";
 import searchIcon from "../../assets/icons/search.svg";
 import add from "../../assets/icons/add-icon.svg";
-import SupplierCard from "../../components/SupplierCard/SupplierCard,js";
+import SupplierCard from "../../components/SupplierCard/SupplierCard";
 import AddSupplierModal from "../../modals/AddSupplierModal/AddSupplierModal";
 import DeleteSupplierModal from "../../modals/DeleteSupplierModal/DeleteSupplierModal";
 import EditSupplierModal from "../../modals/EditSupplierModal/EditSupplierModal";
+import AuthContext from "../../utils/AuthContext";
 
 const Suppliers = () => {
+  const { authToken } = useContext(AuthContext);
   const [suppliers, setSuppliers] = useState([]);
   const [filteredSuppliers, setFilteredSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,20 @@ const Suppliers = () => {
   const [supplierToEdit, setSupplierToEdit] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/suppliers`)
+    if (!authToken) {
+      console.error("No auth token available. Please log in again.");
+      setError("Authorization token missing. Please log in.");
+      setLoading(false);
+      return;
+    }
+
+    fetch(`http://localhost:3000/suppliers`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -39,13 +55,14 @@ const Suppliers = () => {
         setError(error.message);
         setLoading(false);
       });
-  }, []);
+  }, [authToken]);
 
   // Add new supplier
   const handleAddSupplier = (formData) => {
     fetch(`http://localhost:3000/suppliers`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
@@ -70,6 +87,10 @@ const Suppliers = () => {
   const handleDeleteSupplier = (supplierId) => {
     fetch(`http://localhost:3000/suppliers/${supplierId}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
     })
       .then((response) => {
         if (!response.ok) {
