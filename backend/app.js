@@ -8,14 +8,15 @@ const dotenv = require("dotenv");
 
 const cors = require("cors");
 
+// Loading configuration variables
+dotenv.config({ path: `${__dirname}/config/config.env` });
+
 var usersRouter = require("./routes/users");
 var categoriesRouter = require("./routes/categories");
 var itemsRouter = require("./routes/items");
 var suppliersRouter = require("./routes/suppliers");
 var ordersRouter = require("./routes/orders");
 
-// Loading configuration variables
-dotenv.config({ path: `${__dirname}/config/config.env` });
 
 // // Loading and initializing the MongoDB connection
 const { init } = require('./database/index');
