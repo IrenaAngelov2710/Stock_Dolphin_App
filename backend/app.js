@@ -17,7 +17,7 @@ var suppliersRouter = require("./routes/suppliers");
 var ordersRouter = require("./routes/orders");
 var usersRouter = require("./routes/users");
 
-// // Loading and initializing the MongoDB connection
+// Loading and initializing the MongoDB connection
 const { init } = require('./database/index');
 
 // Initialization of the Express application
