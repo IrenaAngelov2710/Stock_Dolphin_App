@@ -1,6 +1,7 @@
 const Item = require("../models/item");
 const Category = require("../models/category");
 const Order = require("../models/order");
+const Activity = require("../models/activity");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -52,11 +53,11 @@ module.exports = {
         });
       }
     } catch (error) {
-      response(
-        res,
-        500,
-        `The fetch for the items by category ${req.params.category}  failed`
-      );
+      res.status(500).send({
+        error: true,
+        message: `The fetch for the items by category ${req.params.category}  failed`,
+        errorDetails: error.message,
+      });
     }
   },
   create: async (req, res) => {
