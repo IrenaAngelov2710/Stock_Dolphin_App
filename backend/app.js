@@ -11,11 +11,11 @@ const cors = require("cors");
 // Loading configuration variables
 dotenv.config({ path: `${__dirname}/config/config.env` });
 
-var usersRouter = require("./routes/users");
 var categoriesRouter = require("./routes/categories");
 var itemsRouter = require("./routes/items");
 var suppliersRouter = require("./routes/suppliers");
 var ordersRouter = require("./routes/orders");
+var usersRouter = require("./routes/users");
 var activitiesRouter = require("./routes/activities");
 
 // Loading and initializing the MongoDB connection
@@ -46,11 +46,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Define the routes
-app.use("/auth", usersRouter);
 app.use("/categories", categoriesRouter);
 app.use("/items", itemsRouter);
 app.use("/suppliers", suppliersRouter);
 app.use("/orders", ordersRouter);
+app.use("/auth", usersRouter);
 app.use("/activities", activitiesRouter);
 
 // Catch 404 and forward to error handler
