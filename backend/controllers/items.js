@@ -72,28 +72,30 @@ module.exports = {
         $push: { items: newItem._id },
       });
 
+      const activity = await Activity.create({
+        action: "created",
+        item: newItem._id,
+        itemName: newItem.name,
+        category: categoryId,
+        user: req.user.userId,
+      });
+
       res.send({
         error: false,
         message: "New item has been created",
         item: newItem,
+        activity: activity,
       });
     } catch (error) {
-      response(res, 500, error.msg);
+      res.status(500).send({
+        error: true,
+        message: "Error creating item",
+        errorDetails: error.message,
+      });
     }
   },
   update: async (req, res) => {},
   delete: async (req, res) => {
-    // if (!req.user) {
-    //     res.status(401).send('You are not login');
-    //     return
-    // }
-
-    // const permission = ac.can(req.user.role).deleteOwn('recipe');
-    // if (!permission.granted) {
-    //     res.status(403).send('Unauthorize permission');
-    //     return
-    // }
-
     try {
       const item = await Item.findById(req.params.id);
 
@@ -106,12 +108,23 @@ module.exports = {
 
       // Delete all orders associated with this item
       await Order.deleteMany({ _id: { $in: item.orders } });
+
+      const activity = new Activity({
+        action: "deleted",
+        user: req.user.userId,
+        category: item.category._id,
+        item: item._id,
+        itemName: item.name,
+      });
+      await activity.save();
+
       // Delete the item itself
       await Item.findByIdAndDelete(req.params.id);
 
       res.send({
         error: false,
         message: `Item with id #${req.params.id} has been deleted`,
+        activity: activity,
       });
     } catch (error) {
       res.status(500).send({
