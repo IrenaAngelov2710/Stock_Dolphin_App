@@ -1,4 +1,3 @@
-
 import React, { memo, useEffect, useState, useContext } from "react";
 import "./VerticalCard.css";
 import trashBinIcon from "../../assets/icons/trash-bin.svg";
@@ -98,7 +97,7 @@ const VerticalCard = memo(({ data, type, onDeleteClick }) => {
           </span>
         )}
 
-        <div className="footer">
+        <div className={`footer ${type === "item" ? "item-footer" : ""}`}>
           {type === "category" && (
             <span className="last-update">
               Updated At:
