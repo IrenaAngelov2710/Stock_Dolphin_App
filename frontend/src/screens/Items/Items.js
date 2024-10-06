@@ -88,7 +88,6 @@ const Items = () => {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${authToken}`,
-        "Content-Type": "application/json",
       },
     })
       .then((response) => {
@@ -154,7 +153,7 @@ const Items = () => {
   }
 
   return (
-    <AppContainer pageTitle={category ? "Inventory/" + category.name : ""}>
+    <AppContainer pageTitle={category ? "Inventory > " + category.name : ""}>
       <div className="inventory-options">
         <Search
           icon={searchIcon}
@@ -165,14 +164,16 @@ const Items = () => {
       </div>
       <div className="vertical-cards">
         {filteredItems?.length > 0 ? (
-          filteredItems.map((item) => (
-            <VerticalCard
-              key={item._id}
-              data={item}
-              type="item"
-              onDeleteClick={() => openDeleteItemModal(item._id)}
-            />
-          ))
+          filteredItems
+            .filter((item) => item)
+            .map((item) => (
+              <VerticalCard
+                key={item._id}
+                data={item}
+                type="item"
+                onDeleteClick={() => openDeleteItemModal(item._id)}
+              />
+            ))
         ) : (
           <p>No items available</p>
         )}
