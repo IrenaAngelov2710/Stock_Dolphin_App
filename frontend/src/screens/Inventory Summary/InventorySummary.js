@@ -1,4 +1,3 @@
-
 import AppContainer from "../../components/AppContainer/AppContainer";
 import "./InventorySummary.css";
 

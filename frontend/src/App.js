@@ -10,8 +10,8 @@ import Items from "./screens/Items/Items";
 import Orders from "./screens/Orders/Orders";
 import Login from "./screens/Login/Login";
 import Signup from "./screens/Signup/Signup";
-import ActivityHistory from "./screens/Activity History/Activity History";
-import InventorySummary from "./screens/Inventory Summary/Inventory Summary";
+import ActivityHistory from "./screens/Activity History/ActivityHistory";
+import InventorySummary from "./screens/Inventory Summary/InventorySummary";
 
 function App() {
   return (
