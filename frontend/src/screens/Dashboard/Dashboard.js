@@ -111,7 +111,7 @@ const Dashboard = () => {
       fetchData();
     }
   }, [authToken, navigate]);
-
+console.log(recentActivities)
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -169,7 +169,7 @@ const Dashboard = () => {
                 <div className="recent-activity" key={index}>
                   <div>
                     {`${activity.user.name} has ${activity.action} item `}
-                    <strong>{activity.item.name}</strong>
+                    <strong>{activity.itemName}</strong>
                     {` in `}
                     <strong>
                       {activity.category.name}{" "}
