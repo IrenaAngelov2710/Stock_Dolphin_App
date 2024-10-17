@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useContext } from "react";
 import "./Suppliers.css";
 import AppContainer from "../../components/AppContainer/AppContainer";
@@ -11,6 +10,7 @@ import AddSupplierModal from "../../modals/AddSupplierModal/AddSupplierModal";
 import DeleteSupplierModal from "../../modals/DeleteSupplierModal/DeleteSupplierModal";
 import EditSupplierModal from "../../modals/EditSupplierModal/EditSupplierModal";
 import AuthContext from "../../utils/AuthContext";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const Suppliers = () => {
   const { authToken } = useContext(AuthContext);
@@ -161,7 +161,7 @@ const Suppliers = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
