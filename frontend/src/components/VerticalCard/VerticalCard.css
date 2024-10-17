@@ -1,3 +1,4 @@
+
 .vertical-card-container {
   width: 240px;
   height: 280px;
@@ -9,7 +10,6 @@
 .vertical-card-container > img {
   width: 240px;
   height: 140px;
-  background-color: cadetblue;
   border-radius: 10px 10px 0 0;
 }
 
