@@ -185,7 +185,7 @@ const AddInvoiceModal = ({
               required
             >
               <option value="" disabled>
-                Select Supplier
+                Supplier
               </option>
               {suppliers.map((supplier) => (
                 <option key={supplier._id} value={supplier._id}>
@@ -207,7 +207,7 @@ const AddInvoiceModal = ({
               required
             >
               <option value="" disabled>
-                Select Order
+                Select Orders
               </option>
               {orders.map((order) => (
                 <option key={order._id} value={order._id}>
