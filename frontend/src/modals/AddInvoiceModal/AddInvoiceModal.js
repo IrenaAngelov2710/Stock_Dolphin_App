@@ -4,8 +4,16 @@ import closeIcon from "../../assets/icons/close-icon.svg";
 import GreenButton from "../../components/GreenButton/GreenButton";
 import GreyButton from "../../components/GreyButton/GreyButton";
 import AuthContext from "../../utils/AuthContext";
+import invoiceLogoPng from "../../assets/icons/invoiceLogoPng.png";
+import jsPDF from "jspdf";
 
-const AddInvoiceModal = ({ show, close, itemId }) => {
+const AddInvoiceModal = ({
+  show,
+  close,
+  itemId,
+  item,
+  incrementInvoiceCount,
+}) => {
   const { authToken } = useContext(AuthContext);
   const [invoiceName, setInvoiceName] = useState("");
   const [suppliers, setSuppliers] = useState([]);
@@ -62,8 +70,90 @@ const AddInvoiceModal = ({ show, close, itemId }) => {
     setIsInvoiceNamePlaceholderHidden(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    generatePDF();
+
+    // Prepare invoice data for the backend
+    const invoiceData = {
+      invoiceName: invoiceName,
+      order: selectedOrder,
+      itemName: item.name,
+      orderTotalPrice:
+        orders.find((o) => o._id === selectedOrder)?.totalPrice || "",
+      orderQuantity:
+        orders.find((o) => o._id === selectedOrder)?.quantity || "",
+      supplier: selectedSupplier,
+      date: selectedDate,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/invoices/create", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(invoiceData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create invoice");
+      }
+
+      console.log("Invoice created successfully");
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+    }
+    incrementInvoiceCount();
+    close();
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Create an Image object for the PNG logo
+    const logoImg = new Image();
+    logoImg.src = invoiceLogoPng;
+
+    // Load the image and then generate the PDF
+    logoImg.onload = () => {
+      // Add the logo to the PDF
+      doc.addImage(logoImg, "PNG", 10, 10, 40, 40);
+
+      // Company Info
+      doc.setFontSize(16);
+      doc.text("StockDolphin", 10, 60);
+      doc.setFontSize(10);
+      doc.text("Your Company Address", 10, 65);
+      doc.text("Skopje, North Macedonia", 10, 70);
+      doc.text("Phone: +38970112233", 10, 75);
+      doc.text("Email: info@stockdolphin.com", 10, 80);
+
+      // Add title and details to the PDF
+      doc.setFontSize(18);
+      doc.text("Invoice", 10, 100);
+      doc.setFontSize(12);
+      doc.text(`Invoice Name: ${invoiceName}`, 10, 110);
+      doc.text(
+        `Supplier: ${suppliers.find((s) => s._id === selectedSupplier)?.name}`,
+        10,
+        115
+      );
+      doc.text(`Order Date: ${selectedDate}`, 10, 120);
+
+      const order = orders.find((o) => o._id === selectedOrder);
+      doc.text(`Order Total: €${order?.totalPrice}`, 10, 125);
+      doc.text(`Order Quantity: ${order?.quantity}`, 10, 130);
+      doc.text(`Item Name: ${item.name}`, 10, 135);
+
+      // Save the PDF
+      doc.save(`${invoiceName || "invoice"}.pdf`);
+      close();
+    };
+    logoImg.onerror = () => {
+      console.error("Error loading logo image.");
+    };
   };
 
   return (
