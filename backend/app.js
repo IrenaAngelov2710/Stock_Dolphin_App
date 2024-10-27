@@ -17,6 +17,7 @@ var suppliersRouter = require("./routes/suppliers");
 var ordersRouter = require("./routes/orders");
 var usersRouter = require("./routes/users");
 var activitiesRouter = require("./routes/activities");
+var invoicesRouter = require("./routes/invoices");
 
 // Loading and initializing the MongoDB connection
 const { init } = require('./database/index');
@@ -52,6 +53,7 @@ app.use("/suppliers", suppliersRouter);
 app.use("/orders", ordersRouter);
 app.use("/auth", usersRouter);
 app.use("/activities", activitiesRouter);
+app.use("/invoices", invoicesRouter);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
