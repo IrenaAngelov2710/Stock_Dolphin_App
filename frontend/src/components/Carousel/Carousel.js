@@ -37,11 +37,11 @@ const Carousel = ({ recentOrders }) => {
             <div key={recentOrder._id} className="carousel-card">
               <img
                 className="recent-item-image"
-                src={`http://localhost:3000/${recentOrder.item.image}`}
+                src={`http://localhost:3000/${recentOrder.item?.image}`}
                 alt=""
               />
               <div className="recent-item-info">
-                <div className="recent-item-name">{recentOrder.item.name}</div>
+                <div className="recent-item-name">{recentOrder.item?.name}</div>
                 <div className="recent-item-quantity">
                   <b>{recentOrder.quantity} Unit</b> | €{" "}
                   {recentOrder.totalPrice}
