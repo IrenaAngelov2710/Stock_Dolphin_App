@@ -1,6 +1,6 @@
 .supplier-card {
     width: 305px;
-    height: 315px;
+    height: 430px;
     border-radius: 10px;
     border: 1px solid #000000;
   }
@@ -56,7 +56,7 @@
   
   .supplier-options {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
   }
   
   .address,
