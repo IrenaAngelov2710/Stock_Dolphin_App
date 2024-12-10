@@ -23,7 +23,7 @@ module.exports = {
       console.log('JWT_SECRET:', JWT_SECRET);
       // Generate a JWT token
       const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "5h",
       });
 
       const { password: _, ...userWithoutPassword } = user.toObject(); // Exclude the password field

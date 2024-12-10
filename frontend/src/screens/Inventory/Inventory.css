@@ -24,7 +24,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  width: 80%;
+  width: 100%;
 }
 
 .view-toggle {

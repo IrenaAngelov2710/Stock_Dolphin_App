@@ -1,4 +1,7 @@
 /* to have space to render 4 cards in a row */
 .custom-supplier-card {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
   }

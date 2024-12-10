@@ -86,8 +86,8 @@ const ActivityHistory = () => {
                   <strong>{activity.item.name}</strong>
                   {` in `}
                   <strong>
-                    {activity.category.name}{" "}
-                    {` (${activity.category.name} Category)`}
+                    {activity.category?.name}{" "}
+                    {` (${activity.category?.name} Category)`}
                   </strong>
                 </div>
                 <span>{formattedDate}</span>

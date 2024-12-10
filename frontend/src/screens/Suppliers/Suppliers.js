@@ -183,7 +183,7 @@ const Suppliers = () => {
             onClick={openAddSupplierModal}
           />
         </div>
-        <div className="vertical-cards custom-supplier-card">
+        <div className="custom-supplier-card">
           {filteredSuppliers?.length > 0 ? (
             filteredSuppliers.map((supplier) => (
               <SupplierCard

@@ -25,6 +25,7 @@ const Inventory = () => {
   const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [viewMode, setViewMode] = useState("vertical");
+  const [totalCost, setTotalCost] = useState(0);
 
   useEffect(() => {
     if (!authToken) {
@@ -100,10 +101,43 @@ const Inventory = () => {
 
   const totalItems = findTotalItems(categories);
 
-  // Calculate total cost
-  const calculateTotalCost = () => {
-    return orders.reduce((total, order) => total + order.totalPrice, 0);
-  };
+  // Fetch total cost
+useEffect(() => {
+  if (!authToken) {
+    console.error("No auth token available. Please log in again.");
+    setError("Authorization token missing. Please log in.");
+    setLoading(false);
+    return;
+  } else {
+    // Fetch data if token exists
+    const fetchData = async () => {
+      try {
+        const headers = {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        };
+
+        // Fetch total cost
+        const totalCostResponse = await fetch(
+          "http://localhost:3000/orders/total-cost",
+          { method: "GET", headers }
+        );
+        if (!totalCostResponse.ok)
+          throw new Error("Failed to fetch total cost");
+        const totalCostData = await totalCostResponse.json();
+        setTotalCost(totalCostData.totalCost);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to load data");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }
+}, [authToken]);
+
 
   // Add new category
   const handleAddCategory = (formData) => {
@@ -213,7 +247,7 @@ const Inventory = () => {
             Total orders: <b>{orders.length}</b>
           </span>
           <span>
-            Total costs: <b>€{calculateTotalCost()}</b>
+            Total costs: <b>€{totalCost}</b>
           </span>
         </div>
         {/* buttons to toggle */}

@@ -23,7 +23,7 @@
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */
-  height: 100vh;
+  height: 120vh;
 }
 
 .sidebar-content > div:first-child {
