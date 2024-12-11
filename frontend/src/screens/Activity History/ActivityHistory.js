@@ -82,7 +82,7 @@ const ActivityHistory = () => {
             return (
               <div className="recent-activity custom" key={index}>
                 <div>
-                  {`${activity.user.name} has ${activity.action} item `}
+                  {`${activity.user?.name} has ${activity.action} item `}
                   <strong>{activity.item.name}</strong>
                   {` in `}
                   <strong>

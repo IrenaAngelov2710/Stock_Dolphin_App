@@ -169,7 +169,7 @@ console.log(recentActivities)
               {recentActivities.map((activity, index) => (
                 <div className="recent-activity" key={index}>
                   <div>
-                    {`${activity.user.name} has ${activity.action} item `}
+                    {`${activity.user?.name} has ${activity.action} item `}
                     <strong>{activity.itemName}</strong>
                     {` in `}
                     <strong>
